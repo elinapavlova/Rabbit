@@ -12,7 +12,7 @@ namespace Services
 {
     public class ResponseService : IResponseService
     {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly AppOptions _options;
         
         public ResponseService
@@ -40,24 +40,22 @@ namespace Services
             // Receiving messages
             consumer.Received += async (_, ea) =>
             {
-               await GetMessages(ea);
+               await GetMessages(ea, channel);
             };
         
             channel.BasicConsume(_options.QueueFrom, true, consumer);
-            
-            // Send message
-            await SendMessage(channel);
 
             Console.ReadLine();
         }
 
-        private async Task GetMessages(BasicDeliverEventArgs ea)
+        private async Task GetMessages(BasicDeliverEventArgs ea, IModel channel)
         {
             var receivedBody = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(receivedBody);
             Console.WriteLine("received {0} : {1}", message, DateTime.Now);
 
             await TryAddResponse(message);
+            await SendMessage(channel);
         }
 
         private async Task SendMessage(IModel channel)

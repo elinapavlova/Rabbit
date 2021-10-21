@@ -16,7 +16,7 @@ namespace App1
                 .RunConsoleAsync();
             */
             
-            var pathToLogFile = "C:/Users/epavlova/RiderProjects/App1/App1/nlog.config";
+            const string pathToLogFile = "C:/Users/epavlova/RiderProjects/App1/App1/nlog.config";
             var logger = NLogBuilder.ConfigureNLog(pathToLogFile).GetCurrentClassLogger();
             try
             {
