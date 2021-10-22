@@ -1,11 +1,6 @@
-﻿using System;
-
-namespace Models.Responses
+﻿namespace Models.Responses
 {
-    public class ResponseDto
+    public class ResponseDto : Response
     {
-        public int Id { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string Message { get; set; }
     }
 }

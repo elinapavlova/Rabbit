@@ -37,8 +37,7 @@ namespace Services
             
             var consumer = new EventingBasicConsumer(channel);
 
-            for (var i = 0; i < 3; i++)
-                await SendMessage(channel);
+            await SendMessage(channel);
 
             // Receiving messages
             consumer.Received += async (_, ea) =>
@@ -74,7 +73,7 @@ namespace Services
                 return;
             }
 
-            var response = new Response
+            var response = new ResponseDto
             {
                 DateCreated = DateTime.Now,
                 Message = message
