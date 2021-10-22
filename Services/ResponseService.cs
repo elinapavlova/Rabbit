@@ -2,7 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Configurations;
-using Infrastructure.UnitOfWork;
+using Infrastructure.Repositories.Response;
 using Microsoft.Extensions.Options;
 using Models;
 using RabbitMQ.Client;
@@ -12,17 +12,17 @@ namespace Services
 {
     public class ResponseService : IResponseService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly AppOptions _options;
-        
+        private readonly IResponseRepository _responseRepository;
+
         public ResponseService
         (
             IOptions<AppOptions> options,
-            IUnitOfWork unitOfWork
+            IResponseRepository responseRepository
         )
         {
             _options = options.Value;
-            _unitOfWork = unitOfWork;
+            _responseRepository = responseRepository;
         }
 
         public async Task ListenAsync()
@@ -40,35 +40,31 @@ namespace Services
             // Receiving messages
             consumer.Received += async (_, ea) =>
             {
-               await GetMessages(ea, channel);
+               await ReceiveMessage(ea);
+               await SendMessage(channel);
             };
-
             channel.BasicConsume(_options.QueueFrom, true, consumer);
 
             Console.ReadLine();
         }
 
-        private async Task GetMessages(BasicDeliverEventArgs ea, IModel channel)
+        private async Task ReceiveMessage(BasicDeliverEventArgs ea)
         {
             var receivedBody = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(receivedBody);
             Console.WriteLine("received {0} : {1}", message, DateTime.Now);
 
-            await TryAddResponse(message);
-            await SendMessage(channel);
+            await TryAddMessage(message);
         }
 
         private async Task SendMessage(IModel channel)
         {
-            // PING to bytes
-            for (var i = 0; i < 3; i++ )
-            {
-                var sentBody = Encoding.UTF8.GetBytes(_options.DefaultMessage);            
-                channel.BasicPublish("", _options.QueueTo, null, sentBody);
-            }
+            // PING to bytes array
+            var sentBody = Encoding.UTF8.GetBytes(_options.DefaultMessage);            
+            channel.BasicPublish("", _options.QueueTo, null, sentBody);
         }
 
-        private async Task TryAddResponse(string message)
+        private async Task TryAddMessage(string message)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -82,9 +78,7 @@ namespace Services
                 Message = message
             };
             
-            // Add response to db
-            await _unitOfWork.ResponseRepository.Add(response);
-            _unitOfWork.Save();
+            await _responseRepository.AddAsync(response);
         }
     }
 }
