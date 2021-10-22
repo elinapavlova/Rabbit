@@ -72,7 +72,7 @@ namespace Services
                 return;
             }
 
-            var response = new Response
+            var response = new ResponseDto
             {
                 DateCreated = DateTime.Now,
                 Message = message
