@@ -1,8 +1,8 @@
 ﻿namespace Infrastructure.Configurations
 {
-    public class AppOptions
+    public class RabbitMqOptions
     {
-        public const string App = "AppOptions";
+        public const string App = "RabbitMqOptions";
         public string HostName { get; set; }
         public string QueueTo { get; set; }
         public string QueueFrom { get; set; }

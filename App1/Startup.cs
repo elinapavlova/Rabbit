@@ -24,9 +24,9 @@ namespace App1
             services.AddDbContextFactory<AppDbContext>(options => options.UseNpgsql(connection,  
                 x => x.MigrationsAssembly("Database")));
             
-            services.Configure<AppOptions>(Configuration.GetSection(AppOptions.App));
-            var appOptions = Configuration.GetSection(AppOptions.App).Get<AppOptions>();
-            services.AddSingleton(appOptions);
+            services.Configure<RabbitMqOptions>(Configuration.GetSection(RabbitMqOptions.App));
+            var rabbitMqOptions = Configuration.GetSection(RabbitMqOptions.App).Get<RabbitMqOptions>();
+            services.AddSingleton(rabbitMqOptions);
 
             services.AddScoped<IResponseRepository, ResponseRepository>();
             services.AddScoped<IResponseService, ResponseService>();

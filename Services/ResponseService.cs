@@ -13,11 +13,11 @@ namespace Services
     public class ResponseService : IResponseService
     {
         private readonly IResponseRepository _responseRepository;
-        private readonly AppOptions _options;
+        private readonly RabbitMqOptions _options;
         
         public ResponseService
         (
-            IOptions<AppOptions> options, 
+            IOptions<RabbitMqOptions> options, 
             IResponseRepository responseRepository
         )
         {
@@ -55,7 +55,7 @@ namespace Services
             var message = Encoding.UTF8.GetString(receivedBody);
             Console.WriteLine("received {0} : {1}", message, DateTime.Now);
 
-            await TryAddMessage(message);
+            await TrySaveMessage(message);
         }
 
         private async Task SendMessage(IModel channel)
@@ -65,7 +65,7 @@ namespace Services
             channel.BasicPublish("", _options.QueueTo, null, sentBody);
         }
         
-        private async Task TryAddMessage(string message)
+        private async Task TrySaveMessage(string message)
         {
             if (string.IsNullOrEmpty(message))
             {
