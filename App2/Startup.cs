@@ -29,7 +29,7 @@ namespace App2
             services.AddSingleton(rabbitMqOptions);
             
             services.AddScoped<IMessageRepository, MessageRepository>();
-            services.AddScoped<IResponseService, ResponseService>();
+            services.AddScoped<IMessageService, MessageService>();
         }
     }
 }

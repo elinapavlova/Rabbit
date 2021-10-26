@@ -10,12 +10,12 @@ using RabbitMQ.Client.Events;
 
 namespace Services
 {
-    public class ResponseService : IResponseService
+    public class MessageService : IMessageService
     {
         private readonly RabbitMqOptions _options;
         private readonly IMessageRepository _responseRepository;
 
-        public ResponseService
+        public MessageService
         (
             IOptions<RabbitMqOptions> options,
             IMessageRepository responseRepository
