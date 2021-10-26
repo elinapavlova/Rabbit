@@ -1,6 +1,6 @@
 ﻿using Database;
 using Infrastructure.Configurations;
-using Infrastructure.Repositories.Response;
+using Infrastructure.Repositories.Message;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,8 +28,8 @@ namespace App1
             var rabbitMqOptions = Configuration.GetSection(RabbitMqOptions.App).Get<RabbitMqOptions>();
             services.AddSingleton(rabbitMqOptions);
 
-            services.AddScoped<IResponseRepository, ResponseRepository>();
-            services.AddScoped<IResponseService, ResponseService>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IMessageService, MessageService>();
         }
     }
 }

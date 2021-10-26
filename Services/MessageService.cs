@@ -2,27 +2,27 @@
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Configurations;
-using Infrastructure.Repositories.Response;
+using Infrastructure.Repositories.Message;
 using Microsoft.Extensions.Options;
-using Models.Responses;
+using Models.Messages;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace Services
 {
-    public class ResponseService : IResponseService
+    public class MessageService : IMessageService
     {
-        private readonly IResponseRepository _responseRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly RabbitMqOptions _options;
         
-        public ResponseService
+        public MessageService
         (
             IOptions<RabbitMqOptions> options, 
-            IResponseRepository responseRepository
+            IMessageRepository messageRepository
         )
         {
             _options = options.Value;
-            _responseRepository = responseRepository;
+            _messageRepository = messageRepository;
         }
 
         public async Task ListenAsync()
@@ -73,13 +73,13 @@ namespace Services
                 return;
             }
 
-            var response = new ResponseDto
+            var response = new MessageDto
             {
                 DateCreated = DateTime.Now,
-                Message = message
+                Text = message
             };
             
-            await _responseRepository.AddAsync(response);
+            await _messageRepository.AddAsync(response);
         }
     }
 }

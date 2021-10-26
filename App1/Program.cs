@@ -12,9 +12,9 @@ namespace App1
         private static async Task Main(string[] args)
         {
             // Code for adding migrations
-             /*await Host.CreateDefaultBuilder(args)
-                .RunConsoleAsync();
-            */
+            // await Host.CreateDefaultBuilder(args)
+            //     .RunConsoleAsync();
+            
             
             const string pathToLogFile = "C:/Users/epavlova/RiderProjects/App1/App1/nlog.config";
             var logger = NLogBuilder.ConfigureNLog(pathToLogFile).GetCurrentClassLogger();
@@ -29,7 +29,7 @@ namespace App1
 
                 // Init Services
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
-                var responseService = serviceProvider.GetService<IResponseService>();
+                var responseService = serviceProvider.GetService<IMessageService>();
 
                 // Listen messages
                 logger.Info("start listening...");

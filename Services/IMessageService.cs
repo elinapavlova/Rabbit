@@ -2,7 +2,7 @@
 
 namespace Services
 {
-    public interface IResponseService
+    public interface IMessageService
     {
         Task ListenAsync();
     }

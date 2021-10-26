@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models.Responses;
+using Models.Messages;
 
 namespace Database
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Response> Responses { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) 
             : base(options)
@@ -16,9 +16,9 @@ namespace Database
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Response>(response =>
+            builder.Entity<Message>(message =>
             {
-                response.Property(r => r.Message).IsRequired().HasMaxLength(500);
+                message.Property(r => r.Text).IsRequired().HasMaxLength(500);
             });
         }
     }
