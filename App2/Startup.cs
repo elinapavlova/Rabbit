@@ -28,7 +28,7 @@ namespace App2
             var rabbitMqOptions = Configuration.GetSection(RabbitMqOptions.App).Get<RabbitMqOptions>();
             services.AddSingleton(rabbitMqOptions);
             
-            services.AddScoped<IResponseRepository, ResponseRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IResponseService, ResponseService>();
         }
     }

@@ -12,8 +12,8 @@ namespace App2
         private static async Task Main(string[] args)
         {
             // Code for adding migrations
-            // await Host.CreateDefaultBuilder(args)
-            //    .RunConsoleAsync();
+             await Host.CreateDefaultBuilder(args)
+                .RunConsoleAsync();
             
             const string pathToLogFile = "C:/Users/epavlova/RiderProjects/App2/App2/nlog.config";
             var logger = NLogBuilder.ConfigureNLog(pathToLogFile).GetCurrentClassLogger();

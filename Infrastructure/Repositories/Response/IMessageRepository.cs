@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Repositories.Response
 {
-    public interface IResponseRepository : IBaseRepository<Models.Response>
+    public interface IMessageRepository : IBaseRepository<Models.Message>
     {
     }
 }
