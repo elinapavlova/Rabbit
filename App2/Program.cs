@@ -28,7 +28,7 @@ namespace App2
 
                 // Init Services
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
-                var responseService = serviceProvider.GetService<IResponseService>();
+                var responseService = serviceProvider.GetService<IMessageService>();
 
                 // Listen messages
                 logger.Info("start listening...");

@@ -10,15 +10,15 @@ using RabbitMQ.Client.Events;
 
 namespace Services
 {
-    public class ResponseService : IResponseService
+    public class MessageService : IMessageService
     {
         private readonly RabbitMqOptions _options;
-        private readonly IResponseRepository _responseRepository;
+        private readonly IMessageRepository _responseRepository;
 
-        public ResponseService
+        public MessageService
         (
             IOptions<RabbitMqOptions> options,
-            IResponseRepository responseRepository
+            IMessageRepository responseRepository
         )
         {
             _options = options.Value;
@@ -72,10 +72,10 @@ namespace Services
                 return;
             }
 
-            var response = new ResponseDto
+            var response = new MessageDto
             {
                 DateCreated = DateTime.Now,
-                Message = message
+                Text = message
             };
             
             await _responseRepository.AddAsync(response);
