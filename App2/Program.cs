@@ -2,21 +2,21 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog;
 using NLog.Web;
 using Services;
 
 namespace App2
 {
-    internal static class Program
+    internal class Program
     {
         private static async Task Main(string[] args)
         {
             // Code for adding migrations
-             await Host.CreateDefaultBuilder(args)
-                .RunConsoleAsync();
+            // await Host.CreateDefaultBuilder(args)
+            //    .RunConsoleAsync();
             
-            const string pathToLogFile = "C:/Users/epavlova/RiderProjects/App2/App2/nlog.config";
-            var logger = NLogBuilder.ConfigureNLog(pathToLogFile).GetCurrentClassLogger();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Debug("init main");
@@ -28,12 +28,14 @@ namespace App2
 
                 // Init Services
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
-                var responseService = serviceProvider.GetService<IMessageService>();
+                var messageService = serviceProvider.GetService<IMessageService>();
 
+                logger.Debug("init main");
+                
                 // Listen messages
                 logger.Info("start listening...");
-                if (responseService != null)
-                    await responseService.ListenAsync();
+                if (messageService != null)
+                    await messageService.ListenAsync();
 
                 Console.ReadLine();
                 logger.Info("end listening.");
@@ -45,7 +47,7 @@ namespace App2
             }
             finally
             {
-                NLog.LogManager.Shutdown();
+                LogManager.Shutdown();
             }
         }
 
