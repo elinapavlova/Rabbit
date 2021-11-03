@@ -13,16 +13,16 @@ namespace Services
     public class MessageService : IMessageService
     {
         private readonly RabbitMqOptions _options;
-        private readonly IMessageRepository _responseRepository;
+        private readonly IMessageRepository _messageRepository;
 
         public MessageService
         (
             IOptions<RabbitMqOptions> options,
-            IMessageRepository responseRepository
+            IMessageRepository messageRepository
         )
         {
             _options = options.Value;
-            _responseRepository = responseRepository;
+            _messageRepository = messageRepository;
         }
 
         public async Task ListenAsync()
@@ -64,21 +64,21 @@ namespace Services
             channel.BasicPublish("", _options.QueueTo, null, sentBody);
         }
 
-        private async Task TrySaveMessage(string message)
+        private async Task TrySaveMessage(string newMessage)
         {
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(newMessage))
             {
                 Console.WriteLine("Bad message text!");
                 return;
             }
 
-            var response = new MessageDto
+            var message = new MessageDto
             {
                 DateCreated = DateTime.Now,
-                Text = message
+                Text = newMessage
             };
             
-            await _responseRepository.AddAsync(response);
+            await _messageRepository.AddAsync(message);
         }
     }
 }
